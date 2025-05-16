@@ -5,3 +5,5 @@ __pycache__/
 
 # project
 .idea
+.DS_store
+credentials.json
