@@ -14,7 +14,7 @@ def get_authenticated_service():
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, SCOPES)
     credentials = flow.run_local_server(port=8000, access_type='offline', prompt='consent')
-    print(f"credentials: {credentials.to_json()}")
+
     return googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
 

@@ -5,16 +5,14 @@ from dotenv import load_dotenv
 from utils import extract_video_id
 
 load_dotenv()
+
 API_KEY = os.getenv("YOUTUBE_API_KEY")
 YOUTUBE_LINK = os.getenv("YOUTUBE_LINK")
 VIDEO_ID = extract_video_id(YOUTUBE_LINK)
 
 youtube = build("youtube", "v3", developerKey=API_KEY)
 
-video_response = youtube.videos().list(
-    part="snippet,statistics",
-    id=VIDEO_ID
-).execute()
+video_response = youtube.videos().list(part="snippet,statistics", id=VIDEO_ID).execute()
 video = video_response["items"][0]
 title = video["snippet"]["title"]
 description = video["snippet"]["description"]
@@ -25,19 +23,22 @@ print(f"설명: {description}")
 print(f"조회수: {view_count}")
 print(f"카테고리 ID: {category_id}")
 
-category_response = youtube.videoCategories().list(
-    part="snippet",
-    id=category_id,
-).execute()
+category_response = (
+    youtube.videoCategories()
+    .list(
+        part="snippet",
+        id=category_id,
+    )
+    .execute()
+)
 category_title = category_response["items"][0]["snippet"]["title"]
 print(f"카테고리 이름: {category_title}")
 
-comments_response = youtube.commentThreads().list(
-    part="snippet",
-    videoId=VIDEO_ID,
-    maxResults=10,
-    textFormat="plainText"
-).execute()
+comments_response = (
+    youtube.commentThreads()
+    .list(part="snippet", videoId=VIDEO_ID, maxResults=10, textFormat="plainText")
+    .execute()
+)
 print("\n📌 댓글 목록:")
 for item in comments_response["items"]:
     comment_snippet = item["snippet"]["topLevelComment"]["snippet"]
